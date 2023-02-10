@@ -15,8 +15,8 @@ function App() {
                 <Routes>
                     <Route exact path={"/"} element={<Home/>}/>
                     <Route exact path={"/addUser"} element={<AddUser/>}/>
-                    <Route exact path={"/editUser"} element={<EditUser/>}/>
-                    <Route exact path={"/deleteUser"} element={<DeleteUser/>}/>
+                    <Route exact path={"/editUser/:id"} element={<EditUser/>}/>
+                    <Route exact path={"/deleteUser:id"} element={<DeleteUser/>}/>
                 </Routes>
             </Router>
         </div>
