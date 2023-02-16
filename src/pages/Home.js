@@ -1,19 +1,38 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-export default function Home() {
+const Home = () => {
+    const [empdata, empdatachange] = useState(null);
+    const navigate = useNavigate();
 
-    const [user, setUsers] = useState([]);
-    useEffect(() => {
-        loadUsers();
-    }, []);
-    const loadUsers = async () => {
-        const result = await axios.get("http://localhost:3004/users");
-        setUsers(result.data);
-        console.log(result);
+    const loadEdit = (id) => {
+        navigate("/EditUser/" + id);
+    }
+    const LoadDetail = (id) => {
+        navigate("/detailUser/" + id);
     }
 
+    const RemoveUser = (id) => {
+        if (window.confirm('Do you want to remove?')) {
+            fetch("http://localhost:3004/user/" + id, {
+                method: "DELETE"
+            }).then((res) => {
+                alert('Removed successfully.')
+                window.location.reload();
+            }).catch((err) => {
+                console.log(err.message)
+            })
+        }
+    }
+    useEffect(() => {
+        fetch("http://localhost:3004/users").then((res) => {
+            return res.json();
+        }).then((resp) => {
+            empdatachange(resp);
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    }, [])
     return (
         <div className={"container"}>
             <div className={"py-4"}>
@@ -30,20 +49,31 @@ export default function Home() {
                     </thead>
                     <tbody>
                     {
-                        user.map((user, index) => (
+                        empdata && empdata.map((user, index) => (
                             <tr>
-                                <th key={index}>{index + 1}</th>
-                                <td>{user.id}</td>
+                                <th>{index + 1}</th>
+                                <td key={user.id}>{user.id}</td>
                                 <td>{user.name}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
                                 <td>
-                                    <button className={"btn btn-success mx-2"}>View</button>
-                                    {/* eslint-disable-next-line no-template-curly-in-string */}
-                                    <Link to={"/editUser/${user.id}"}
-                                          className={"btn btn-primary mx-2"}>Edit</Link>
-
-                                    <button className={"btn btn-danger mx-2"}>Delete</button>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a className={"btn btn-success mx-2"}
+                                       onClick={() => {
+                                           LoadDetail(user.id)
+                                       }}
+                                    >View</a>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a onClick={() => {
+                                        loadEdit(user.id)
+                                    }}
+                                       className={"btn btn-primary mx-2"}>Edit</a>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a className={"btn btn-danger mx-2"}
+                                       onClick={() => {
+                                           RemoveUser(user.id)
+                                       }}
+                                    >Delete</a>
                                 </td>
                             </tr>
                         ))
@@ -54,3 +84,4 @@ export default function Home() {
         </div>
     );
 }
+export default Home;

@@ -6,6 +6,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import AddUser from "./user/AddUser";
 import EditUser from "./user/EditUser";
 import DeleteUser from "./user/DeleteUser";
+import DetailUser from "./user/DetailUser";
 
 function App() {
     return (
@@ -15,8 +16,9 @@ function App() {
                 <Routes>
                     <Route exact path={"/"} element={<Home/>}/>
                     <Route exact path={"/addUser"} element={<AddUser/>}/>
-                    <Route exact path={"/editUser/:id"} element={<EditUser/>}/>
-                    <Route exact path={"/deleteUser:id"} element={<DeleteUser/>}/>
+                    <Route exact path={'/editUser/:empid'} element={<EditUser/>}/>
+                    <Route exact path={"/detailUser/:empid"} element={<DetailUser/>}/>
+                    <Route exact path={"/deleteUser:empid"} element={<DeleteUser/>}/>
                 </Routes>
             </Router>
         </div>
